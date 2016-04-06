@@ -11,6 +11,7 @@ def get_db
 end
 
 configure do
+  # create users
   get_db.execute 'CREATE TABLE IF NOT EXISTS "users" 
   (
     "id" INTEGER PRIMARY KEY  NOT NULL ,
@@ -21,6 +22,8 @@ configure do
     "color" VARCHAR NOT NULL 
   )'
 
+
+  # create and insert barbers
   get_db.execute 'CREATE TABLE IF NOT EXISTS "barbers"
   (
     "id" INTEGER PRIMARY KEY  NOT NULL ,
@@ -29,12 +32,14 @@ configure do
   barbers = [
             {:id => 1, :name => 'Jessie Pinkman'},
             {:id => 2, :name => 'Walter White'},
-            {:id => 3, :name => 'Gus Fring'}
+            {:id => 3, :name => 'Gus Fring'},
+            {:id => 4, :name => 'Antonio Jazz'},
             ]
   
   barbers.each do |barber|
       get_db.execute 'INSERT OR IGNORE INTO barbers(id, name) VALUES(?, ?)',[barber[:id], barber[:name]]
   end
+
 end
 
 get '/' do
@@ -106,20 +111,6 @@ post '/contacts' do
     return (erb :visit)
   end
 
-  Pony.mail({
-  :to => @email,
-  :via => :smtp,
-  :subject => "Отзыв barber",
-  :body => @message,
-  :via_options => {
-    :address              => 'smtp.gmail.com',
-    :port                 => '587',
-    :enable_starttls_auto => true,
-    :user_name            => '',
-    :password             => '',
-    :authentication       => :plain, # :plain, :login, :cram_md5, no auth by default
-    :domain               => "localhost.localdomain" # the HELO domain provided by the client to the server
-  }
-})
+
   erb "OK, to mail #{@email} send message."
 end
