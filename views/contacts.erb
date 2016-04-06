@@ -1,0 +1,14 @@
+<h2>Контакты</h2>
+<p>На этой странице вы сможете отправить письмо</p>
+
+<form action="/contacts" method="POST">
+  <div class="form-group">
+    <label>Введите адрес электронной почты для обратной связи:</label>
+    <input name="email" type="email" class="form-control" placeholder="Ваша@почта" value="<%=@email%>">
+  </div>
+  <div class="form-group">
+    <label>Ваш текст сообщения:</label>
+    <textarea class="form-control" name="message" value="<%=@message%>"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Отправить!</button>
+</form>
