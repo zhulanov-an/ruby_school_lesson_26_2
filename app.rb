@@ -26,10 +26,15 @@ configure do
     "id" INTEGER PRIMARY KEY  NOT NULL ,
     "name" VARCHAR NOT NULL  DEFAULT (null)
   )'
+  barbers = [
+            {:id => 1, :name => 'Jessie Pinkman'},
+            {:id => 2, :name => 'Walter White'},
+            {:id => 3, :name => 'Gus Fring'}
+            ]
   
-  get_db.execute 'INSERT OR IGNORE INTO barbers(id, name) VALUES(?, ?)',[1, 'Jessie Pinkman']
-  get_db.execute 'INSERT OR IGNORE INTO barbers(id, name) VALUES(?, ?)',[2, 'Walter White']
-  get_db.execute 'INSERT OR IGNORE INTO barbers(id, name) VALUES(?, ?)',[3, 'Gus Fring']
+  barbers.each do |barber|
+      get_db.execute 'INSERT OR IGNORE INTO barbers(id, name) VALUES(?, ?)',[barber[:id], barber[:name]]
+  end
 end
 
 get '/' do
