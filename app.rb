@@ -10,6 +10,10 @@ def get_db
   db
 end
 
+before do
+  @barbers = get_db.execute 'select * from barbers order by id'
+end
+
 configure do
   # create users
   get_db.execute 'CREATE TABLE IF NOT EXISTS "users" 
@@ -34,6 +38,7 @@ configure do
             {:id => 2, :name => 'Walter White'},
             {:id => 3, :name => 'Gus Fring'},
             {:id => 4, :name => 'Antonio Jazz'},
+            {:id => 5, :name => 'Victoria Ice'}
             ]
   
   barbers.each do |barber|
@@ -55,7 +60,6 @@ get '/contacts' do
 end
 
 get '/visit' do
-  @barbers = get_db.execute 'select * from barbers order by id'
 	erb :visit
 end
 
@@ -72,7 +76,6 @@ post '/visit' do
 	@barber = params[:barber]
 	@color = params[:color]
   @error = []
-  @barbers = get_db.execute 'select * from barbers order by id'
 
   hash_errors = {
     :username => "Введите имя",
@@ -89,7 +92,6 @@ post '/visit' do
 
   get_db.execute 'insert into Users (username, phone, datestamp, barber, color)
        values(?, ?, ?, ?, ?)', [@username, @phone, @datetime, @barber, @color]
-
 
 
 	erb "OK, username is #{@username}, #{@phone}, #{@datetime}, #{@barber}, #{@color}"
@@ -110,7 +112,6 @@ post '/contacts' do
   if @error.size!= 0
     return (erb :visit)
   end
-
 
   erb "OK, to mail #{@email} send message."
 end
